@@ -6,10 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timbenniks/gridsome-source-prismic.git"
+  },
   "keywords": [
-    "gridsome-plugin"
+    "gridsome",
+    "gridsome-plugin",
+    "buttercms",
+    "vuejs",
+    "gridsome-source-plugin"
   ],
-  "author": "Tim Benniks",
+  "homepage": "https://github.com/timbenniks/gridsome-source-prismic#readme",
+  "author": "Tim Benniks <tbenniks@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "prismic-dom": "^2.2.3",
