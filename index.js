@@ -1,6 +1,6 @@
 const Prismic = require('prismic-javascript')
 const { documentParser, capitalize } = require('./utils')
-
+const singlePages = ['home', 'youtube', 'about', 'page_not_found', 'writings', 'speaking'];
 class PrismicSource {
   constructor(api, { prismic_token, prismic_url, collection_prefix = 'Prismic', html_serializer = null, link_resolver = null }) {
     this.token = prismic_token
@@ -21,14 +21,13 @@ class PrismicSource {
   }
 
   async loadCollections(addCollection) {
-    // get all prismic docs
-    const { results } = await this.prismic.query('', {pageSize: 500})
+    const { results } = await this.prismic.query('', {pageSize: 1000})
 
-    // get all the types
-    let documentTypes = results.map(r => r.type)
+    let documentTypes = results.map((page) => {
+      return singlePages.includes(page.type) ? 'singlePage' : page.type
+    })
+
     documentTypes = [...new Set(documentTypes)]
-
-    // create a gridsome collection for each type
     const collections = {}
     documentTypes.forEach((type) => {
       collections[type] = addCollection({
@@ -36,15 +35,15 @@ class PrismicSource {
       })
     })
 
-    // for each prismic doc, parse all the supported fields
-    // and add a gridsome node
     results.forEach((document) => {
-      const collection = collections[document.type]
-      collection.addNode(documentParser(
+      const collection = collections[singlePages.includes(document.type) ? 'singlePage' : document.type]
+      const cleanredUpDoc = documentParser(
         document,
         this.link_resolver,
         this.html_serializer
-      ))
+      )
+      
+      collection.addNode(cleanredUpDoc)
     })
   }
 }

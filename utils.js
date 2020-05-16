@@ -69,13 +69,12 @@ const parseSocialCard = (content) => {
   return {
     title: DOM.RichText.asText(content.title),
     description: DOM.RichText.asText(content.description),
-    image: content.image
+    image: content.image.url
   }
 }
 
 // function that parses a prismic document to a javascript object
 const documentParser = ({
-  id,
   uid,
   type,
   tags,
@@ -85,7 +84,8 @@ const documentParser = ({
   data,
 }, linkResolver, htmlSerializer) => {
   const parsedDocument = {
-    id,
+    id: uid,
+    slug: uid,
     uid,
     type,
     tags,
@@ -112,7 +112,7 @@ const documentParser = ({
             return {
               type: slice.slice_type,
               content: {
-                content: parseSocialCard(slice.primary)
+                ...parseSocialCard(slice.primary)
               }
             }
           })
